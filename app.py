@@ -1,19 +1,19 @@
 from flask import Flask, request, jsonify
-import os, json
-from datetime import datetime
 from groq import Groq
+import json
+from datetime import datetime
 
 app = Flask(__name__)
 
 # ══════════════════════════════════════════════════════
-#  STEP 1: PASTE YOUR API KEY BELOW
-#  Get it free from: console.anthropic.com
+#  PASTE YOUR FREE GROQ API KEY BELOW
+#  Get it free from: console.groq.com
 # ══════════════════════════════════════════════════════
-GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "")
+GROQ_API_KEY = "****************"
 client = Groq(api_key=GROQ_API_KEY)
 
 # ══════════════════════════════════════════════════════
-#  STEP 2: COLLEGE DATA (edit anytime)
+#  COLLEGE DATA (edit anytime)
 # ══════════════════════════════════════════════════════
 COLLEGE_DATA = """
 COLLEGE NAME: Solamalai College of Engineering (SCE)
@@ -44,9 +44,13 @@ ACCREDITATION:
 - Unnat Bharat Abhiyan nodal center
 
 ABOUT SCE:
-Solamalai College of Engineering is the 2nd oldest engineering college in Madurai District, established in 1995. Formerly Raja College of Engineering and Technology, acquired by Solamalai Group in 2016. The Solamalai Group has been active since 1962 in FMCG, transport, infrastructure, and cinema with 1400+ employees and 600 crore annual turnover.
+Solamalai College of Engineering is the 2nd oldest engineering college in Madurai District,
+established in 1995. Formerly Raja College of Engineering and Technology, acquired by
+Solamalai Group in 2016. The Solamalai Group has been active since 1962 in FMCG,
+transport, infrastructure, and cinema with 1400+ employees and 600 crore annual turnover.
 
-VISION: Premier institute for higher education, nurturing youth as global, socially responsible citizens through academic, technical and innovative excellence.
+VISION: Premier institute for higher education, nurturing youth as global, socially
+responsible citizens through academic, technical and innovative excellence.
 
 UG PROGRAMS (573 total seats):
 - B.E. Computer Science and Engineering (CSE)
@@ -147,17 +151,14 @@ def ask_ai(question, extra=""):
         "Never invent information.\n\nSCE DATA:\n" + data
     )
     r = client.chat.completions.create(
-    model="llama-3.3-70b-versatile",
-
-    max_tokens=1024,
-    messages=[
-        {"role": "system", "content": sys_prompt},
-        {"role": "user", "content": question}
-    ]
-)
+        model="***********",
+        max_tokens=1024,
+        messages=[
+            {"role": "system", "content": sys_prompt},
+            {"role": "user", "content": question}
+        ]
+    )
     return r.choices[0].message.content
-    
-
 
 @app.route("/")
 def index():
@@ -436,7 +437,7 @@ Type below or select a topic from the sidebar.</div>
     }
   },55);
 })();
-var lines=['> Initializing SCE-BOT v2.0...','> Connecting to AI engine...','> Loading college database...','> Verifying NAAC A Grade data...','> Knowledge base: LOADED','> All systems: ONLINE','> Ready to assist students.'];
+var lines=['> Initializing SCE-BOT v2.0...','> Connecting to Groq AI engine...','> Loading college database...','> Verifying NAAC A Grade data...','> Knowledge base: LOADED','> All systems: ONLINE','> Ready to assist students.'];
 var bEl=document.getElementById('bootText');
 function boot(i){
   if(i>=lines.length){document.getElementById('enterBtn').classList.add('show');return}
@@ -479,7 +480,7 @@ function ask(q){
     msgs.scrollTop=msgs.scrollHeight;btn.disabled=false;
   }).catch(function(){
     var e=document.getElementById('typing');if(e)e.remove();
-    msgs.innerHTML+='<div class="mw"><div class="av bot">BOT</div><div class="mb bot">ERROR: Check your API key in app.py and restart the server.</div></div>';
+    msgs.innerHTML+='<div class="mw"><div class="av bot">BOT</div><div class="mb bot">ERROR: Check your Groq API key in app.py and restart the server.</div></div>';
     msgs.scrollTop=msgs.scrollHeight;btn.disabled=false;
   });
 }
@@ -492,4 +493,4 @@ function saveInfo(){collegeInfo=document.getElementById('adminText').value;close
 </html>"""
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+    app.run(debug=True, port=5000)
